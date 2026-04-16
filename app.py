@@ -1,38 +1,69 @@
 import streamlit as st
+import math
 
-st.set_page_config(page_title="Chemistry Master System v5", layout="wide")
+st.set_page_config(page_title="Chemistry Study Hub", layout="wide")
 
-st.title("🧪 Chemistry Master System v5")
-st.write("Learn. Train. Test. Track. Pharma Path.")
+# Sidebar navigation
+page = st.sidebar.radio("Navigate", ["Home", "Tools", "Quiz", "Pharma Mode"])
 
-page = st.sidebar.selectbox(
-    "Choose Mode",
-    ["Home", "Learn", "Spaced Repetition", "Exam Mode", "Progress", "Pharma Path"]
-)
-
+# ---------------- HOME ----------------
 if page == "Home":
-    st.header("Welcome")
-    st.write("This is your full chemistry training system.")
+    st.title("🧪 Chemistry Study Hub")
+    st.subheader("A real interactive learning system")
 
-elif page == "Learn":
-    st.header("Learning Module")
-    st.write("We will connect structured lessons here.")
+    col1, col2, col3 = st.columns(3)
 
-elif page == "Spaced Repetition":
-    st.header("Memory System")
-    st.write("Anki-style flashcards coming next step.")
+    col1.metric("Modules", "4")
+    col2.metric("Tools", "3")
+    col3.metric("Mode", "Learning")
 
-elif page == "Exam Mode":
-    st.header("Timed Exams")
-    st.write("We will add timer + scoring engine.")
+    st.write("Use the sidebar to navigate.")
 
-elif page == "Progress":
-    st.header("Your Progress")
-    st.write("Graphs and analytics will show here.")
+# ---------------- TOOLS ----------------
+elif page == "Tools":
+    st.title("⚗️ Chemistry Tools")
 
-elif page == "Pharma Path":
-    st.header("Pharmaceutical Chemistry Path")
-    st.write("Drug chemistry, dosage, kinetics, solubility.")
+    tool = st.selectbox("Choose Tool", ["pH Calculator", "Molarity", "Dilution"])
+
+    if tool == "pH Calculator":
+        h = st.number_input("[H+] concentration", min_value=0.0000001)
+        if h > 0:
+            st.success(f"pH = {-math.log10(h):.2f}")
+
+    elif tool == "Molarity":
+        m = st.number_input("Moles")
+        v = st.number_input("Volume (L)")
+        if v > 0:
+            st.success(f"M = {m/v:.3f}")
+
+    elif tool == "Dilution":
+        c1 = st.number_input("C1")
+        v1 = st.number_input("V1")
+        c2 = st.number_input("C2")
+        if c2 > 0:
+            st.success(f"V2 = {(c1*v1)/c2:.3f}")
+
+# ---------------- QUIZ ----------------
+elif page == "Quiz":
+    st.title("🧠 Quick Quiz")
+
+    q = st.radio("What is pH formula?", ["-log[H+]", "log[H+]", "H+/V"])
+
+    if st.button("Check"):
+        if q == "-log[H+]":
+            st.success("Correct 🔥")
+        else:
+            st.error("Wrong")
+
+# ---------------- PHARMA ----------------
+elif page == "Pharma Mode":
+    st.title("💊 Pharma Chemistry Path")
+
+    st.write("""
+    - Drug solubility depends on pH
+    - Weak acids behave differently in body
+    - Henderson-Hasselbalch equation is key
+    """)
 
 
 
