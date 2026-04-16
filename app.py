@@ -1,69 +1,100 @@
 import streamlit as st
-import math
 
 st.set_page_config(page_title="Chemistry Study Hub", layout="wide")
 
-# Sidebar navigation
-page = st.sidebar.radio("Navigate", ["Home", "Tools", "Quiz", "Pharma Mode"])
+# ---------------- HEADER ----------------
+st.title("🧪 Chemistry Study Hub")
+st.caption("CHEM 1101 + CHEM 1201 Learning System")
+
+# ---------------- SIDEBAR ----------------
+course = st.sidebar.selectbox(
+    "Navigate",
+    ["Home", "CHEM 1101", "CHEM 1201", "Practice Quiz"]
+)
 
 # ---------------- HOME ----------------
-if page == "Home":
-    st.title("🧪 Chemistry Study Hub")
-    st.subheader("A real interactive learning system")
+if course == "Home":
+    st.header("Welcome 👋")
 
     col1, col2, col3 = st.columns(3)
 
-    col1.metric("Modules", "4")
-    col2.metric("Tools", "3")
-    col3.metric("Mode", "Learning")
+    col1.metric("Courses", "2")
+    col2.metric("Modules", "13+")
+    col3.metric("Mode", "Study")
 
-    st.write("Use the sidebar to navigate.")
+    st.write("Use the sidebar to start learning chemistry step by step.")
 
-# ---------------- TOOLS ----------------
-elif page == "Tools":
-    st.title("⚗️ Chemistry Tools")
+# ---------------- CHEM 1101 ----------------
+elif course == "CHEM 1101":
+    st.header("📘 CHEM 1101 - General Chemistry 1")
 
-    tool = st.selectbox("Choose Tool", ["pH Calculator", "Molarity", "Dilution"])
+    topic = st.selectbox("Select Topic", [
+        "Atomic Structure",
+        "Periodic Trends",
+        "Bonding",
+        "Stoichiometry",
+        "Gases",
+        "Thermochemistry",
+        "Acids & Bases"
+    ])
 
-    if tool == "pH Calculator":
-        h = st.number_input("[H+] concentration", min_value=0.0000001)
-        if h > 0:
-            st.success(f"pH = {-math.log10(h):.2f}")
+    st.subheader("📚 Lesson")
 
-    elif tool == "Molarity":
-        m = st.number_input("Moles")
-        v = st.number_input("Volume (L)")
-        if v > 0:
-            st.success(f"M = {m/v:.3f}")
+    lessons = {
+        "Atomic Structure": "Atoms contain protons, neutrons, electrons. Electron configuration controls chemical behavior.",
+        "Periodic Trends": "Across period: radius decreases. Down group: radius increases.",
+        "Bonding": "Ionic = transfer of electrons. Covalent = sharing.",
+        "Stoichiometry": "Use mole ratios from balanced equations.",
+        "Gases": "PV = nRT ideal gas law.",
+        "Thermochemistry": "Heat changes in reactions (exo vs endo).",
+        "Acids & Bases": "pH = -log[H+]"
+    }
 
-    elif tool == "Dilution":
-        c1 = st.number_input("C1")
-        v1 = st.number_input("V1")
-        c2 = st.number_input("C2")
-        if c2 > 0:
-            st.success(f"V2 = {(c1*v1)/c2:.3f}")
+    st.info(lessons[topic])
+
+# ---------------- CHEM 1201 ----------------
+elif course == "CHEM 1201":
+    st.header("📘 CHEM 1201 - General Chemistry 2")
+
+    topic = st.selectbox("Select Topic", [
+        "Equilibrium",
+        "Kinetics",
+        "Thermodynamics",
+        "Electrochemistry",
+        "Solutions",
+        "Buffers"
+    ])
+
+    st.subheader("📚 Lesson")
+
+    lessons = {
+        "Equilibrium": "Forward and reverse reactions balance at equilibrium.",
+        "Kinetics": "Reaction rate depends on concentration and temperature.",
+        "Thermodynamics": "ΔG = ΔH - TΔS determines spontaneity.",
+        "Electrochemistry": "Redox reactions produce electricity.",
+        "Solutions": "Solubility depends on polarity.",
+        "Buffers": "Resist pH change using weak acid/base systems."
+    }
+
+    st.info(lessons[topic])
 
 # ---------------- QUIZ ----------------
-elif page == "Quiz":
-    st.title("🧠 Quick Quiz")
+elif course == "Practice Quiz":
+    st.header("🧠 Chemistry Quiz")
 
-    q = st.radio("What is pH formula?", ["-log[H+]", "log[H+]", "H+/V"])
+    col1, col2 = st.columns(2)
 
-    if st.button("Check"):
+    with col1:
+        q = st.radio("What is pH formula?", ["-log[H+]", "log[H+]", "H+/V"])
+
+    with col2:
+        st.write("Select answer and check below")
+
+    if st.button("Check Answer"):
         if q == "-log[H+]":
             st.success("Correct 🔥")
         else:
-            st.error("Wrong")
-
-# ---------------- PHARMA ----------------
-elif page == "Pharma Mode":
-    st.title("💊 Pharma Chemistry Path")
-
-    st.write("""
-    - Drug solubility depends on pH
-    - Weak acids behave differently in body
-    - Henderson-Hasselbalch equation is key
-    """)
+            st.error("Wrong — correct answer is -log[H+]")
 
 
 
