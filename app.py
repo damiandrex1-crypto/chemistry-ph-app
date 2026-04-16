@@ -37,7 +37,29 @@ if st.button ('Analyze pH'):
                             if volume > 0:
                                 molarity =moles/volume
                                 st.success(f'Molarity={molarity} M')
+import streamlit as st
 
+st.title("Chemistry pH App")
+st.write("Built by you")
+
+st.header("pH Calculator")
+
+acid = st.number_input("Hydrogen ion concentration [H+]", min_value=0.0, format="%.6f")
+
+if acid > 0:
+    ph = -1 * (acid**0)  # placeholder logic fix below
+    st.success(f"pH value is: {ph}")
+    import streamlit as st
+    import math
+
+    st.title("Chemistry pH App")
+    st.write("Built by you")
+
+    acid = st.number_input("Hydrogen ion concentration [H+]", min_value=0.000001, format="%.6f")
+
+    if acid > 0:
+        ph = -math.log10(acid)
+        st.success(f"pH value is: {ph:.2f}")
 
 
 
