@@ -1,33 +1,29 @@
 import streamlit as st
 import math
+import random
 
 st.set_page_config(page_title="Chemistry Study Hub", layout="wide")
-
-# ---------------- HEADER ----------------
-st.title("🧪 Chemistry Study Hub")
-st.caption("CHEM 1101 + CHEM 1201 + Tools System")
 
 # ---------------- NAVIGATION ----------------
 course = st.sidebar.selectbox(
     "Navigate",
-    ["Home", "CHEM 1101", "CHEM 1201", "pH Tool"]
+    ["Home", "CHEM 1101", "CHEM 1201", "pH Tool", "Exam Mode"]
 )
 
 # ---------------- HOME ----------------
 if course == "Home":
-    st.header("Welcome 👋")
+    st.title("🧪 Chemistry Study Hub")
+    st.write("Full CHEM 1101 + CHEM 1201 learning + tools + exams")
 
     col1, col2, col3 = st.columns(3)
 
     col1.metric("Courses", "2")
-    col2.metric("Topics", "13+")
-    col3.metric("Tools", "pH Calculator")
-
-    st.write("Use the sidebar to start learning chemistry step by step.")
+    col2.metric("Tools", "pH Calculator")
+    col3.metric("Mode", "Exam Ready")
 
 # ---------------- CHEM 1101 ----------------
 elif course == "CHEM 1101":
-    st.header("📘 CHEM 1101 - General Chemistry 1")
+    st.title("📘 CHEM 1101 - General Chemistry 1")
 
     topic = st.selectbox("Select Topic", [
         "Atomic Structure",
@@ -41,28 +37,28 @@ elif course == "CHEM 1101":
 
     lessons = {
         "Atomic Structure": {
-            "definition": "Atoms are made of protons, neutrons, electrons.",
-            "explanation": "Protons define element. Electrons control bonding. Neutrons affect mass.",
+            "definition": "Atoms consist of protons, neutrons, and electrons.",
+            "explanation": "Protons define element, electrons control bonding, neutrons affect mass number.",
             "example": "Carbon has 6 protons and 6 electrons.",
             "exam_tip": "Electron configuration determines reactivity."
         },
 
         "Periodic Trends": {
-            "definition": "Trends explain atomic changes in periodic table.",
+            "definition": "Trends describe periodic changes in properties.",
             "explanation": "Across period: radius decreases. Down group: radius increases.",
-            "example": "Na is larger than Cl in same period.",
-            "exam_tip": "Always mention nuclear charge + shielding."
+            "example": "Cl is smaller than Na.",
+            "exam_tip": "Mention nuclear charge + shielding effect."
         },
 
         "Bonding": {
-            "definition": "Bonding is how atoms combine.",
-            "explanation": "Ionic = transfer, Covalent = sharing, Metallic = electron sea.",
-            "example": "NaCl is ionic, H2O is covalent.",
+            "definition": "Atoms bond to achieve stability.",
+            "explanation": "Ionic = transfer, covalent = sharing, metallic = electron sea.",
+            "example": "NaCl ionic, H2O covalent.",
             "exam_tip": "Use electronegativity difference."
         },
 
         "Stoichiometry": {
-            "definition": "Uses mole ratios from balanced equations.",
+            "definition": "Uses mole ratios from equations.",
             "explanation": "Convert grams → moles → ratios.",
             "example": "2H2 + O2 → 2H2O",
             "exam_tip": "Balance equation first."
@@ -72,11 +68,11 @@ elif course == "CHEM 1101":
             "definition": "Gas behavior follows PV = nRT.",
             "explanation": "Pressure, volume, temperature relationships.",
             "example": "Hot air expands.",
-            "exam_tip": "Temperature must be in Kelvin."
+            "exam_tip": "Temperature in Kelvin."
         },
 
         "Thermochemistry": {
-            "definition": "Study of energy changes.",
+            "definition": "Study of heat energy changes.",
             "explanation": "Exothermic releases heat, endothermic absorbs heat.",
             "example": "Burning fuel releases energy.",
             "exam_tip": "ΔH negative = exothermic."
@@ -106,7 +102,7 @@ elif course == "CHEM 1101":
 
 # ---------------- CHEM 1201 ----------------
 elif course == "CHEM 1201":
-    st.header("📘 CHEM 1201 - General Chemistry 2")
+    st.title("📘 CHEM 1201 - General Chemistry 2")
 
     topic = st.selectbox("Select Topic", [
         "Equilibrium",
@@ -119,23 +115,23 @@ elif course == "CHEM 1201":
 
     lessons = {
         "Equilibrium": {
-            "definition": "Forward and reverse reactions balance.",
-            "explanation": "Dynamic equilibrium where rates are equal.",
+            "definition": "Forward and reverse reactions are balanced.",
+            "explanation": "Dynamic equilibrium occurs when rates are equal.",
             "example": "N2 + 3H2 ⇌ 2NH3",
             "exam_tip": "Use Le Chatelier’s principle."
         },
 
         "Kinetics": {
-            "definition": "Study of reaction speed.",
-            "explanation": "Rate depends on concentration and temperature.",
-            "example": "Higher temperature = faster reaction.",
+            "definition": "Studies reaction speed.",
+            "explanation": "Depends on concentration, temperature, catalysts.",
+            "example": "Higher temperature increases rate.",
             "exam_tip": "Rate ≠ equilibrium."
         },
 
         "Thermodynamics": {
-            "definition": "Predicts if reactions are spontaneous.",
+            "definition": "Predicts if reaction is spontaneous.",
             "explanation": "ΔG = ΔH - TΔS.",
-            "example": "Ice melting at room temp.",
+            "example": "Ice melting.",
             "exam_tip": "Negative ΔG = spontaneous."
         },
 
@@ -155,7 +151,7 @@ elif course == "CHEM 1201":
 
         "Buffers": {
             "definition": "Resist pH change.",
-            "explanation": "Weak acid + conjugate base system.",
+            "explanation": "Weak acid + conjugate base.",
             "example": "Blood buffer system.",
             "exam_tip": "Henderson-Hasselbalch equation."
         }
@@ -177,7 +173,7 @@ elif course == "CHEM 1201":
 
 # ---------------- pH TOOL ----------------
 elif course == "pH Tool":
-    st.header("🧪 pH Calculator + Acid/Base Identifier")
+    st.title("🧪 pH Calculator + Acid/Base Identifier")
 
     mode = st.selectbox("Mode", ["pH Calculator", "Acid/Base Identifier"])
 
@@ -189,11 +185,11 @@ elif course == "pH Tool":
             st.success(f"pH = {ph:.2f}")
 
             if ph < 7:
-                st.write("🔴 Acidic solution")
+                st.write("🔴 Acidic")
             elif ph > 7:
-                st.write("🟢 Basic solution")
+                st.write("🟢 Basic")
             else:
-                st.write("⚪ Neutral solution")
+                st.write("⚪ Neutral")
 
     elif mode == "Acid/Base Identifier":
         ph = st.number_input("Enter pH value", min_value=0.0, max_value=14.0)
@@ -208,3 +204,42 @@ elif course == "pH Tool":
             st.success("Weak Base → NH3, NaHCO3")
         else:
             st.success("Strong Base → NaOH, KOH")
+
+# ---------------- EXAM MODE ----------------
+elif course == "Exam Mode":
+    st.title("🧠 Chemistry Exam Mode")
+
+    questions = [
+        {
+            "q": "What is pH formula?",
+            "options": ["-log[H+]", "log[H+]", "H+/V"],
+            "answer": "-log[H+]"
+        },
+        {
+            "q": "What does PV=nRT represent?",
+            "options": ["Gas law", "Bonding", "Acid rule"],
+            "answer": "Gas law"
+        },
+        {
+            "q": "Oxidation means?",
+            "options": ["Gain electrons", "Lose electrons", "Gain protons"],
+            "answer": "Lose electrons"
+        },
+        {
+            "q": "What is equilibrium?",
+            "options": ["One-way reaction", "Forward=reverse rate", "No reaction"],
+            "answer": "Forward=reverse rate"
+        }
+    ]
+
+    question = random.choice(questions)
+
+    st.subheader(question["q"])
+
+    choice = st.radio("Choose answer", question["options"])
+
+    if st.button("Check Answer"):
+        if choice == question["answer"]:
+            st.success("Correct 🔥")
+        else:
+            st.error(f"Wrong. Correct answer: {question['answer']}")
