@@ -12,12 +12,96 @@ course = st.sidebar.selectbox(
     ["Home", "CHEM 1101", "CHEM 1201", "Practice Quiz"]
 )
 
+# ---------------- DATA ----------------
+chem_1101 = {
+    "Atomic Structure": {
+        "definition": "Atoms are made of protons, neutrons, and electrons.",
+        "explanation": "Protons determine identity. Neutrons affect mass. Electrons control bonding.",
+        "example": "Carbon has 6 protons and 6 electrons.",
+        "exam_tip": "Electrons determine chemical behavior."
+    },
+    "Periodic Trends": {
+        "definition": "Trends describe patterns in the periodic table.",
+        "explanation": "Across period: radius decreases. Down group: radius increases.",
+        "example": "Na is larger than Cl.",
+        "exam_tip": "Use nuclear charge + shielding."
+    },
+    "Bonding": {
+        "definition": "How atoms form compounds.",
+        "explanation": "Ionic = transfer. Covalent = sharing. Metallic = electron sea.",
+        "example": "NaCl is ionic.",
+        "exam_tip": "Check electronegativity difference."
+    },
+    "Stoichiometry": {
+        "definition": "Mole relationships in reactions.",
+        "explanation": "Balanced equations give mole ratios.",
+        "example": "2H2 + O2 → 2H2O",
+        "exam_tip": "Always convert to moles first."
+    },
+    "Gases": {
+        "definition": "Gas behavior uses PV=nRT.",
+        "explanation": "Pressure, volume, temperature, moles relationship.",
+        "example": "Hot gas increases pressure.",
+        "exam_tip": "Use Kelvin only."
+    },
+    "Thermochemistry": {
+        "definition": "Energy changes in reactions.",
+        "explanation": "Exothermic releases heat. Endothermic absorbs heat.",
+        "example": "Burning fuel.",
+        "exam_tip": "ΔH negative = exothermic."
+    },
+    "Acids & Bases": {
+        "definition": "Acids donate H+, bases accept H+.",
+        "explanation": "pH measures acidity. Strong acids fully dissociate.",
+        "example": "HCl is strong acid.",
+        "exam_tip": "pH < 7 is acidic."
+    }
+}
+
+chem_1201 = {
+    "Equilibrium": {
+        "definition": "Forward and reverse reactions occur at same rate.",
+        "explanation": "Concentrations stay constant but reactions continue.",
+        "example": "N2 + 3H2 ⇌ 2NH3",
+        "exam_tip": "Le Chatelier principle."
+    },
+    "Kinetics": {
+        "definition": "Reaction speed.",
+        "explanation": "Depends on temperature, concentration, catalysts.",
+        "example": "Heat increases rate.",
+        "exam_tip": "Rate ≠ equilibrium."
+    },
+    "Thermodynamics": {
+        "definition": "Predicts spontaneity.",
+        "explanation": "ΔG = ΔH - TΔS",
+        "example": "Ice melting.",
+        "exam_tip": "Negative ΔG = spontaneous."
+    },
+    "Electrochemistry": {
+        "definition": "Redox reactions produce electricity.",
+        "explanation": "Oxidation = loss, reduction = gain.",
+        "example": "Batteries.",
+        "exam_tip": "OIL RIG."
+    },
+    "Solutions": {
+        "definition": "Homogeneous mixtures.",
+        "explanation": "Like dissolves like.",
+        "example": "Salt in water.",
+        "exam_tip": "Temperature affects solubility."
+    },
+    "Buffers": {
+        "definition": "Resist pH changes.",
+        "explanation": "Weak acid + conjugate base system.",
+        "example": "Blood buffer system.",
+        "exam_tip": "Henderson-Hasselbalch equation."
+    }
+}
+
 # ---------------- HOME ----------------
 if course == "Home":
     st.header("Welcome 👋")
 
     col1, col2, col3 = st.columns(3)
-
     col1.metric("Courses", "2")
     col2.metric("Modules", "13+")
     col3.metric("Mode", "Study")
@@ -28,73 +112,24 @@ if course == "Home":
 elif course == "CHEM 1101":
     st.header("📘 CHEM 1101 - General Chemistry 1")
 
-    topic = st.selectbox("Select Topic", [
-        "Atomic Structure",
-        "Periodic Trends",
-        "Bonding",
-        "Stoichiometry",
-        "Gases",
-        "Thermochemistry",
-        "Acids & Bases"
-    ])
+    topic = st.selectbox("Select Topic", list(chem_1101.keys()))
+    data = chem_1101[topic]
 
-    st.subheader("📚 Lesson")
-
-    lessons = {
-        "Atomic Structure": "Atoms contain protons, neutrons, electrons. Electron configuration controls chemical behavior.",
-        "Periodic Trends": "Across period: radius decreases. Down group: radius increases.",
-        "Bonding": "Ionic = transfer of electrons. Covalent = sharing.",
-        "Stoichiometry": "Use mole ratios from balanced equations.",
-        "Gases": "PV = nRT ideal gas law.",
-        "Thermochemistry": "Heat changes in reactions (exo vs endo).",
-        "Acids & Bases": "pH = -log[H+]"
-    }
-
-    st.info(lessons[topic])
+    st.subheader(topic)
+    st.write("**Definition:**", data["definition"])
+    st.write("**Explanation:**", data["explanation"])
+    st.write("**Example:**", data["example"])
+    st.write("**Exam Tip:**", data["exam_tip"])
 
 # ---------------- CHEM 1201 ----------------
 elif course == "CHEM 1201":
     st.header("📘 CHEM 1201 - General Chemistry 2")
 
-    topic = st.selectbox("Select Topic", [
-        "Equilibrium",
-        "Kinetics",
-        "Thermodynamics",
-        "Electrochemistry",
-        "Solutions",
-        "Buffers"
-    ])
+    topic = st.selectbox("Select Topic", list(chem_1201.keys()))
+    data = chem_1201[topic]
 
-    st.subheader("📚 Lesson")
-
-    lessons = {
-        "Equilibrium": "Forward and reverse reactions balance at equilibrium.",
-        "Kinetics": "Reaction rate depends on concentration and temperature.",
-        "Thermodynamics": "ΔG = ΔH - TΔS determines spontaneity.",
-        "Electrochemistry": "Redox reactions produce electricity.",
-        "Solutions": "Solubility depends on polarity.",
-        "Buffers": "Resist pH change using weak acid/base systems."
-    }
-
-    st.info(lessons[topic])
-
-# ---------------- QUIZ ----------------
-elif course == "Practice Quiz":
-    st.header("🧠 Chemistry Quiz")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        q = st.radio("What is pH formula?", ["-log[H+]", "log[H+]", "H+/V"])
-
-    with col2:
-        st.write("Select answer and check below")
-
-    if st.button("Check Answer"):
-        if q == "-log[H+]":
-            st.success("Correct 🔥")
-        else:
-            st.error("Wrong — correct answer is -log[H+]")
-
-
-
+    st.subheader(topic)
+    st.write("**Definition:**", data["definition"])
+    st.write("**Explanation:**", data["explanation"])
+    st.write("**Example:**", data["example"])
+    st.write("**Exam Tip:**", data["exam_tip"])
