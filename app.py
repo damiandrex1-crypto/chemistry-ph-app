@@ -16,19 +16,19 @@ course = st.sidebar.selectbox(
 chem_1101 = {
     "Atomic Structure": {
         "definition": "Atoms are made of protons, neutrons, and electrons.",
-        "explanation": "Protons determine identity. Neutrons affect mass. Electrons control bonding.",
+        "explanation": "Protons determine element identity. Neutrons affect mass. Electrons control bonding.",
         "example": "Carbon has 6 protons and 6 electrons.",
         "exam_tip": "Electrons determine chemical behavior."
     },
     "Periodic Trends": {
-        "definition": "Trends describe patterns in the periodic table.",
+        "definition": "Patterns in the periodic table.",
         "explanation": "Across period: radius decreases. Down group: radius increases.",
         "example": "Na is larger than Cl.",
-        "exam_tip": "Use nuclear charge + shielding."
+        "exam_tip": "Use nuclear charge and shielding."
     },
     "Bonding": {
         "definition": "How atoms form compounds.",
-        "explanation": "Ionic = transfer. Covalent = sharing. Metallic = electron sea.",
+        "explanation": "Ionic = transfer, Covalent = sharing, Metallic = electron sea.",
         "example": "NaCl is ionic.",
         "exam_tip": "Check electronegativity difference."
     },
@@ -39,7 +39,7 @@ chem_1101 = {
         "exam_tip": "Always convert to moles first."
     },
     "Gases": {
-        "definition": "Gas behavior uses PV=nRT.",
+        "definition": "Gas behavior follows PV=nRT.",
         "explanation": "Pressure, volume, temperature, moles relationship.",
         "example": "Hot gas increases pressure.",
         "exam_tip": "Use Kelvin only."
@@ -47,12 +47,12 @@ chem_1101 = {
     "Thermochemistry": {
         "definition": "Energy changes in reactions.",
         "explanation": "Exothermic releases heat. Endothermic absorbs heat.",
-        "example": "Burning fuel.",
+        "example": "Burning fuel releases heat.",
         "exam_tip": "ΔH negative = exothermic."
     },
     "Acids & Bases": {
         "definition": "Acids donate H+, bases accept H+.",
-        "explanation": "pH measures acidity. Strong acids fully dissociate.",
+        "explanation": "pH scale measures acidity.",
         "example": "HCl is strong acid.",
         "exam_tip": "pH < 7 is acidic."
     }
@@ -61,13 +61,13 @@ chem_1101 = {
 chem_1201 = {
     "Equilibrium": {
         "definition": "Forward and reverse reactions occur at same rate.",
-        "explanation": "Concentrations stay constant but reactions continue.",
+        "explanation": "System is dynamic but stable.",
         "example": "N2 + 3H2 ⇌ 2NH3",
         "exam_tip": "Le Chatelier principle."
     },
     "Kinetics": {
         "definition": "Reaction speed.",
-        "explanation": "Depends on temperature, concentration, catalysts.",
+        "explanation": "Depends on temperature and concentration.",
         "example": "Heat increases rate.",
         "exam_tip": "Rate ≠ equilibrium."
     },
@@ -80,7 +80,7 @@ chem_1201 = {
     "Electrochemistry": {
         "definition": "Redox reactions produce electricity.",
         "explanation": "Oxidation = loss, reduction = gain.",
-        "example": "Batteries.",
+        "example": "Batteries use redox.",
         "exam_tip": "OIL RIG."
     },
     "Solutions": {
@@ -90,7 +90,7 @@ chem_1201 = {
         "exam_tip": "Temperature affects solubility."
     },
     "Buffers": {
-        "definition": "Resist pH changes.",
+        "definition": "Resist pH change.",
         "explanation": "Weak acid + conjugate base system.",
         "example": "Blood buffer system.",
         "exam_tip": "Henderson-Hasselbalch equation."
@@ -133,3 +133,55 @@ elif course == "CHEM 1201":
     st.write("**Explanation:**", data["explanation"])
     st.write("**Example:**", data["example"])
     st.write("**Exam Tip:**", data["exam_tip"])
+
+# ---------------- PRACTICE QUIZ ----------------
+elif course == "Practice Quiz":
+    st.header("🧪 Practice Quiz")
+
+    questions = [
+        {
+            "question": "What is the charge of a proton?",
+            "options": ["negative", "neutral", "positive", "zero"],
+            "answer": "positive"
+        },
+        {
+            "question": "pH less than 7 means the solution is:",
+            "options": ["basic", "acidic", "neutral", "salt"],
+            "answer": "acidic"
+        },
+        {
+            "question": "PV = nRT is used for:",
+            "options": ["solids", "liquids", "gases", "metals"],
+            "answer": "gases"
+        },
+        {
+            "question": "OIL RIG stands for:",
+            "options": [
+                "oxidation is loss, reduction is gain",
+                "oxygen is loss, iron is gain",
+                "oxidation is liquid, reduction is gas",
+                "none"
+            ],
+            "answer": "oxidation is loss, reduction is gain"
+        }
+    ]
+
+    score = 0
+
+    for i, q in enumerate(questions):
+        st.write(f"**{i+1}. {q['question']}**")
+
+        choice = st.radio(
+            f"Select answer {i+1}",
+            q["options"],
+            key=i
+        )
+
+        if choice == q["answer"]:
+            score += 1
+
+    if st.button("Submit Quiz"):
+        st.success(f"Your Score: {score} / {len(questions)}")
+
+        if score == len(questions):
+            st.balloons()
