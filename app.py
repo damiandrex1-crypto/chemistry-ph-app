@@ -1,154 +1,210 @@
 import streamlit as st
-import time
+import math
 
 st.set_page_config(page_title="Chemistry Study Hub", layout="wide")
 
 # ---------------- HEADER ----------------
 st.title("🧪 Chemistry Study Hub")
-st.caption("CHEM 1101 + CHEM 1201 - Exam Prep System")
+st.caption("CHEM 1101 + CHEM 1201 + Tools System")
 
-# ---------------- SIDEBAR ----------------
+# ---------------- NAVIGATION ----------------
 course = st.sidebar.selectbox(
     "Navigate",
-    ["Home", "CHEM 1101", "CHEM 1201", "Practice Quiz", "Exam Mode"]
+    ["Home", "CHEM 1101", "CHEM 1201", "pH Tool"]
 )
-
-# ---------------- DATA ----------------
-chem_1101 = {
-    "Atomic Structure": "Atoms contain protons, neutrons, electrons.",
-    "Stoichiometry": "Mole ratios in reactions.",
-    "Gases": "PV=nRT gas law.",
-    "Bonding": "Ionic, covalent, metallic bonding."
-}
-
-chem_1201 = {
-    "Equilibrium": "Forward = reverse reaction rate.",
-    "Kinetics": "Reaction speed depends on conditions.",
-    "Thermodynamics": "ΔG = ΔH - TΔS",
-    "Electrochemistry": "Redox reactions produce electricity."
-}
 
 # ---------------- HOME ----------------
 if course == "Home":
     st.header("Welcome 👋")
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Courses", "2")
-    col2.metric("Mode", "Exam Prep")
-    col3.metric("System", "Active")
 
-    st.write("Use this app to study, test yourself, and prepare for exams.")
+    col1.metric("Courses", "2")
+    col2.metric("Topics", "13+")
+    col3.metric("Tools", "pH Calculator")
+
+    st.write("Use the sidebar to start learning chemistry step by step.")
 
 # ---------------- CHEM 1101 ----------------
 elif course == "CHEM 1101":
-    st.header("📘 CHEM 1101")
+    st.header("📘 CHEM 1101 - General Chemistry 1")
 
-    topic = st.selectbox("Select Topic", list(chem_1101.keys()))
-    st.write(chem_1101[topic])
+    topic = st.selectbox("Select Topic", [
+        "Atomic Structure",
+        "Periodic Trends",
+        "Bonding",
+        "Stoichiometry",
+        "Gases",
+        "Thermochemistry",
+        "Acids & Bases"
+    ])
+
+    lessons = {
+        "Atomic Structure": {
+            "definition": "Atoms are made of protons, neutrons, electrons.",
+            "explanation": "Protons define element. Electrons control bonding. Neutrons affect mass.",
+            "example": "Carbon has 6 protons and 6 electrons.",
+            "exam_tip": "Electron configuration determines reactivity."
+        },
+
+        "Periodic Trends": {
+            "definition": "Trends explain atomic changes in periodic table.",
+            "explanation": "Across period: radius decreases. Down group: radius increases.",
+            "example": "Na is larger than Cl in same period.",
+            "exam_tip": "Always mention nuclear charge + shielding."
+        },
+
+        "Bonding": {
+            "definition": "Bonding is how atoms combine.",
+            "explanation": "Ionic = transfer, Covalent = sharing, Metallic = electron sea.",
+            "example": "NaCl is ionic, H2O is covalent.",
+            "exam_tip": "Use electronegativity difference."
+        },
+
+        "Stoichiometry": {
+            "definition": "Uses mole ratios from balanced equations.",
+            "explanation": "Convert grams → moles → ratios.",
+            "example": "2H2 + O2 → 2H2O",
+            "exam_tip": "Balance equation first."
+        },
+
+        "Gases": {
+            "definition": "Gas behavior follows PV = nRT.",
+            "explanation": "Pressure, volume, temperature relationships.",
+            "example": "Hot air expands.",
+            "exam_tip": "Temperature must be in Kelvin."
+        },
+
+        "Thermochemistry": {
+            "definition": "Study of energy changes.",
+            "explanation": "Exothermic releases heat, endothermic absorbs heat.",
+            "example": "Burning fuel releases energy.",
+            "exam_tip": "ΔH negative = exothermic."
+        },
+
+        "Acids & Bases": {
+            "definition": "Acids donate H+, bases accept H+.",
+            "explanation": "pH measures acidity level.",
+            "example": "HCl is strong acid.",
+            "exam_tip": "pH < 7 acidic, > 7 basic."
+        }
+    }
+
+    data = lessons[topic]
+
+    st.subheader("📌 Definition")
+    st.write(data["definition"])
+
+    st.subheader("🧠 Explanation")
+    st.write(data["explanation"])
+
+    st.subheader("🧪 Example")
+    st.write(data["example"])
+
+    st.subheader("⚠️ Exam Tip")
+    st.warning(data["exam_tip"])
 
 # ---------------- CHEM 1201 ----------------
 elif course == "CHEM 1201":
-    st.header("📘 CHEM 1201")
+    st.header("📘 CHEM 1201 - General Chemistry 2")
 
-    topic = st.selectbox("Select Topic", list(chem_1201.keys()))
-    st.write(chem_1201[topic])
-
-# ---------------- PRACTICE QUIZ ----------------
-elif course == "Practice Quiz":
-    st.header("🧪 Practice Quiz")
-
-    questions = [
-        {
-            "q": "What is the charge of a proton?",
-            "options": ["negative", "neutral", "positive", "zero"],
-            "answer": "positive"
-        },
-        {
-            "q": "pH < 7 means?",
-            "options": ["basic", "acidic", "neutral", "salt"],
-            "answer": "acidic"
-        },
-        {
-            "q": "PV=nRT is used for?",
-            "options": ["solids", "liquids", "gases", "plasma"],
-            "answer": "gases"
-        }
-    ]
-
-    score = 0
-
-    for i, q in enumerate(questions):
-        st.write(f"**Q{i+1}: {q['q']}**")
-        choice = st.radio("Choose:", q["options"], key=f"quiz_{i}")
-
-        if choice == q["answer"]:
-            score += 1
-        else:
-            if "wrong_answers" not in st.session_state:
-                st.session_state.wrong_answers = []
-            st.session_state.wrong_answers.append(q["q"])
-
-    if st.button("Submit Quiz"):
-        st.success(f"Score: {score}/{len(questions)}")
-
-# ---------------- EXAM MODE (STEP 1) ----------------
-elif course == "Exam Mode":
-    st.header("🧪 Exam Mode (Timed Test)")
-
-    if "start_time" not in st.session_state:
-        st.session_state.start_time = time.time()
-
-    questions = [
-        {"q": "What is charge of proton?", "options": ["negative","neutral","positive","zero"], "answer": "positive"},
-        {"q": "PV=nRT applies to?", "options": ["solids","liquids","gases","metals"], "answer": "gases"},
-        {"q": "pH < 7 means?", "options": ["basic","acidic","neutral","salt"], "answer": "acidic"}
-    ]
-
-    elapsed = int(time.time() - st.session_state.start_time)
-    remaining = 300 - elapsed
-
-    st.warning(f"Time left: {remaining} seconds")
-
-    if remaining <= 0:
-        st.error("Time is up!")
-
-    score = 0
-
-    for i, q in enumerate(questions):
-        st.write(f"**Q{i+1}: {q['q']}**")
-        choice = st.radio("Answer:", q["options"], key=f"exam_{i}")
-
-        if choice == q["answer"]:
-            score += 1
-
-    if st.button("Submit Exam"):
-        st.success(f"Final Score: {score}/{len(questions)}")
-
-        if score >= len(questions) * 0.75:
-            st.balloons()
-            st.success("Exam Ready Level 🔥")
-
-# ---------------- WEAK AREA TRACKER (STEP 2) ----------------
-    st.subheader("📊 Weak Areas")
-
-    if "wrong_answers" in st.session_state:
-        if len(st.session_state.wrong_answers) > 0:
-            for w in st.session_state.wrong_answers:
-                st.write("•", w)
-        else:
-            st.info("No weak areas yet.")
-    else:
-        st.info("Take quizzes first.")
-
-# ---------------- FOCUS MODE (STEP 3) ----------------
-    st.subheader("🎯 Focus Mode")
-
-    focus = st.selectbox("Pick weak topic focus", [
-        "Atomic Structure",
-        "Stoichiometry",
-        "Gases",
+    topic = st.selectbox("Select Topic", [
         "Equilibrium",
-        "Kinetics"
+        "Kinetics",
+        "Thermodynamics",
+        "Electrochemistry",
+        "Solutions",
+        "Buffers"
     ])
 
-    st.info(f"Focus on: {focus}")
+    lessons = {
+        "Equilibrium": {
+            "definition": "Forward and reverse reactions balance.",
+            "explanation": "Dynamic equilibrium where rates are equal.",
+            "example": "N2 + 3H2 ⇌ 2NH3",
+            "exam_tip": "Use Le Chatelier’s principle."
+        },
+
+        "Kinetics": {
+            "definition": "Study of reaction speed.",
+            "explanation": "Rate depends on concentration and temperature.",
+            "example": "Higher temperature = faster reaction.",
+            "exam_tip": "Rate ≠ equilibrium."
+        },
+
+        "Thermodynamics": {
+            "definition": "Predicts if reactions are spontaneous.",
+            "explanation": "ΔG = ΔH - TΔS.",
+            "example": "Ice melting at room temp.",
+            "exam_tip": "Negative ΔG = spontaneous."
+        },
+
+        "Electrochemistry": {
+            "definition": "Redox reactions produce electricity.",
+            "explanation": "Oxidation = loss, reduction = gain.",
+            "example": "Batteries.",
+            "exam_tip": "OIL RIG rule."
+        },
+
+        "Solutions": {
+            "definition": "Homogeneous mixtures.",
+            "explanation": "Like dissolves like.",
+            "example": "Salt in water.",
+            "exam_tip": "Polarity matters."
+        },
+
+        "Buffers": {
+            "definition": "Resist pH change.",
+            "explanation": "Weak acid + conjugate base system.",
+            "example": "Blood buffer system.",
+            "exam_tip": "Henderson-Hasselbalch equation."
+        }
+    }
+
+    data = lessons[topic]
+
+    st.subheader("📌 Definition")
+    st.write(data["definition"])
+
+    st.subheader("🧠 Explanation")
+    st.write(data["explanation"])
+
+    st.subheader("🧪 Example")
+    st.write(data["example"])
+
+    st.subheader("⚠️ Exam Tip")
+    st.warning(data["exam_tip"])
+
+# ---------------- pH TOOL ----------------
+elif course == "pH Tool":
+    st.header("🧪 pH Calculator + Acid/Base Identifier")
+
+    mode = st.selectbox("Mode", ["pH Calculator", "Acid/Base Identifier"])
+
+    if mode == "pH Calculator":
+        h = st.number_input("[H+] concentration (mol/L)", min_value=0.0000000001, format="%.10f")
+
+        if h > 0:
+            ph = -math.log10(h)
+            st.success(f"pH = {ph:.2f}")
+
+            if ph < 7:
+                st.write("🔴 Acidic solution")
+            elif ph > 7:
+                st.write("🟢 Basic solution")
+            else:
+                st.write("⚪ Neutral solution")
+
+    elif mode == "Acid/Base Identifier":
+        ph = st.number_input("Enter pH value", min_value=0.0, max_value=14.0)
+
+        if ph < 3:
+            st.error("Strong Acid → HCl, HNO3, H2SO4")
+        elif ph < 7:
+            st.warning("Weak Acid → CH3COOH, H2CO3")
+        elif ph == 7:
+            st.info("Neutral → Water")
+        elif ph <= 11:
+            st.success("Weak Base → NH3, NaHCO3")
+        else:
+            st.success("Strong Base → NaOH, KOH")
