@@ -1,28 +1,32 @@
 import streamlit as st
 import math
 import random
-import base64
+import os
+import PyPDF2
 
-st.set_page_config(page_title="Chemistry Study Hub", layout="wide")
+st.set_page_config(page_title="Chemistry Study Hub Pro", layout="wide")
+
+# ---------------- SETUP ----------------
+os.makedirs("slides", exist_ok=True)
 
 # ---------------- NAVIGATION ----------------
-course = st.sidebar.selectbox(
+page = st.sidebar.selectbox(
     "Navigate",
-    ["Home", "CHEM 1101", "CHEM 1201", "pH Tool", "Exam Mode", "Lecture Slides"]
+    ["Home", "CHEM 1101", "CHEM 1201", "pH Tool", "Exam Mode", "Lecture Slides", "Study With Me"]
 )
 
 # ---------------- HOME ----------------
-if course == "Home":
-    st.title("🧪 Chemistry Study Hub")
-    st.write("CHEM 1101 + CHEM 1201 + Tools + Exams + Lecture Slides")
+if page == "Home":
+    st.title("🧪 Chemistry Study Hub Pro")
+    st.write("Your full chemistry learning + exam + AI-style study system")
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Courses", "2")
     col2.metric("Tools", "pH + Exams")
-    col3.metric("Feature", "Slides Viewer")
+    col3.metric("Modes", "Study + Slides")
 
 # ---------------- CHEM 1101 ----------------
-elif course == "CHEM 1101":
+elif page == "CHEM 1101":
     st.title("📘 CHEM 1101")
 
     topic = st.selectbox("Select Topic", [
@@ -35,73 +39,21 @@ elif course == "CHEM 1101":
         "Acids & Bases"
     ])
 
-    lessons = {
-        "Atomic Structure": {
-            "definition": "Atoms consist of protons, neutrons, electrons.",
-            "explanation": "Protons define element identity, electrons control bonding.",
-            "example": "Carbon has 6 protons.",
-            "exam_tip": "Electron configuration = reactivity."
-        },
-
-        "Periodic Trends": {
-            "definition": "Patterns in periodic table properties.",
-            "explanation": "Across: radius decreases. Down: increases.",
-            "example": "Na larger than Cl.",
-            "exam_tip": "Mention shielding effect."
-        },
-
-        "Bonding": {
-            "definition": "How atoms connect.",
-            "explanation": "Ionic, covalent, metallic bonding.",
-            "example": "NaCl ionic.",
-            "exam_tip": "Use electronegativity."
-        },
-
-        "Stoichiometry": {
-            "definition": "Mole relationships in reactions.",
-            "explanation": "Convert grams → moles → ratios.",
-            "example": "2H2 + O2 → 2H2O",
-            "exam_tip": "Balance first."
-        },
-
-        "Gases": {
-            "definition": "PV=nRT relationships.",
-            "explanation": "Gas behavior changes with T, P, V.",
-            "example": "Hot air expands.",
-            "exam_tip": "Kelvin only."
-        },
-
-        "Thermochemistry": {
-            "definition": "Energy in reactions.",
-            "explanation": "Exothermic vs endothermic.",
-            "example": "Burning fuel.",
-            "exam_tip": "ΔH sign matters."
-        },
-
-        "Acids & Bases": {
-            "definition": "H+ donors and acceptors.",
-            "explanation": "pH scale measures acidity.",
-            "example": "HCl strong acid.",
-            "exam_tip": "pH < 7 acid."
-        }
+    data = {
+        "Atomic Structure": "Atoms contain protons, neutrons, electrons.",
+        "Periodic Trends": "Across period radius decreases, down group increases.",
+        "Bonding": "Ionic, covalent, metallic bonding.",
+        "Stoichiometry": "Mole ratios from balanced equations.",
+        "Gases": "PV = nRT gas law.",
+        "Thermochemistry": "Heat changes in reactions.",
+        "Acids & Bases": "Acids donate H+, bases accept H+."
     }
 
-    d = lessons[topic]
-
-    st.subheader("Definition")
-    st.write(d["definition"])
-
-    st.subheader("Explanation")
-    st.write(d["explanation"])
-
-    st.subheader("Example")
-    st.write(d["example"])
-
-    st.subheader("Exam Tip")
-    st.warning(d["exam_tip"])
+    st.subheader("Lesson")
+    st.write(data[topic])
 
 # ---------------- CHEM 1201 ----------------
-elif course == "CHEM 1201":
+elif page == "CHEM 1201":
     st.title("📘 CHEM 1201")
 
     topic = st.selectbox("Select Topic", [
@@ -113,74 +65,28 @@ elif course == "CHEM 1201":
         "Buffers"
     ])
 
-    lessons = {
-        "Equilibrium": {
-            "definition": "Forward and reverse rates equal.",
-            "explanation": "Dynamic balance of reactions.",
-            "example": "N2 + 3H2 ⇌ 2NH3",
-            "exam_tip": "Le Chatelier's principle."
-        },
-
-        "Kinetics": {
-            "definition": "Reaction speed study.",
-            "explanation": "Rate depends on concentration and temperature.",
-            "example": "Higher temp = faster reaction.",
-            "exam_tip": "Rate ≠ equilibrium."
-        },
-
-        "Thermodynamics": {
-            "definition": "Spontaneity prediction.",
-            "explanation": "ΔG = ΔH - TΔS.",
-            "example": "Ice melting.",
-            "exam_tip": "ΔG negative = spontaneous."
-        },
-
-        "Electrochemistry": {
-            "definition": "Redox and electricity.",
-            "explanation": "Oxidation loss, reduction gain.",
-            "example": "Batteries.",
-            "exam_tip": "OIL RIG."
-        },
-
-        "Solutions": {
-            "definition": "Homogeneous mixtures.",
-            "explanation": "Like dissolves like.",
-            "example": "Salt water.",
-            "exam_tip": "Polarity matters."
-        },
-
-        "Buffers": {
-            "definition": "Resist pH changes.",
-            "explanation": "Weak acid + base system.",
-            "example": "Blood buffer.",
-            "exam_tip": "H-H equation."
-        }
+    data = {
+        "Equilibrium": "Forward and reverse rates equal.",
+        "Kinetics": "Reaction speed depends on conditions.",
+        "Thermodynamics": "ΔG = ΔH - TΔS.",
+        "Electrochemistry": "Redox reactions produce electricity.",
+        "Solutions": "Like dissolves like.",
+        "Buffers": "Resist pH changes."
     }
 
-    d = lessons[topic]
-
-    st.subheader("Definition")
-    st.write(d["definition"])
-
-    st.subheader("Explanation")
-    st.write(d["explanation"])
-
-    st.subheader("Example")
-    st.write(d["example"])
-
-    st.subheader("Exam Tip")
-    st.warning(d["exam_tip"])
+    st.subheader("Lesson")
+    st.write(data[topic])
 
 # ---------------- pH TOOL ----------------
-elif course == "pH Tool":
-    st.title("🧪 pH Tool")
+elif page == "pH Tool":
+    st.title("🧪 pH Calculator")
 
-    mode = st.selectbox("Mode", ["Calculator", "Identifier"])
+    mode = st.selectbox("Mode", ["Calculate pH", "Identify Acid/Base"])
 
-    if mode == "Calculator":
+    if mode == "Calculate pH":
         h = st.number_input("[H+] concentration", min_value=0.0000000001, format="%.10f")
-
         ph = -math.log10(h)
+
         st.success(f"pH = {ph:.2f}")
 
         if ph < 7:
@@ -191,7 +97,7 @@ elif course == "pH Tool":
             st.write("Neutral")
 
     else:
-        ph = st.number_input("Enter pH", min_value=0.0, max_value=14.0)
+        ph = st.number_input("Enter pH", 0.0, 14.0)
 
         if ph < 3:
             st.error("Strong Acid")
@@ -205,45 +111,110 @@ elif course == "pH Tool":
             st.success("Strong Base")
 
 # ---------------- EXAM MODE ----------------
-elif course == "Exam Mode":
+elif page == "Exam Mode":
     st.title("🧠 Exam Mode")
 
     questions = [
-        {"q": "pH formula?", "options": ["-log[H+]", "log[H+]", "H+V"], "answer": "-log[H+]"},
-        {"q": "PV=nRT is?", "options": ["Gas law", "Bonding", "Acid"], "answer": "Gas law"},
-        {"q": "Oxidation?", "options": ["Gain e-", "Lose e-", "Gain H+"], "answer": "Lose e-"},
+        ("pH formula?", ["-log[H+]", "log[H+]", "H+V"], "-log[H+]"),
+        ("PV=nRT is?", ["Gas law", "Bonding", "Acid"], "Gas law"),
+        ("Oxidation means?", ["Gain e-", "Lose e-", "Gain H+"], "Lose e-"),
     ]
 
-    q = random.choice(questions)
+    q, options, ans = random.choice(questions)
 
-    st.subheader(q["q"])
-    choice = st.radio("Answer", q["options"])
+    st.subheader(q)
+    choice = st.radio("Answer", options)
 
     if st.button("Check"):
-        if choice == q["answer"]:
+        if choice == ans:
             st.success("Correct 🔥")
         else:
-            st.error("Wrong")
+            st.error(f"Wrong. Answer: {ans}")
 
-# ---------------- LECTURE SLIDES (PDF VIEWER) ----------------
-elif course == "Lecture Slides":
-    st.title("📚 Lecture Slides Viewer")
+# ---------------- LECTURE SLIDES ----------------
+elif page == "Lecture Slides":
+    st.title("📚 Lecture Slides System")
 
     subject = st.selectbox("Course", ["CHEM 1101", "CHEM 1201"])
 
-    def show_pdf(file_path):
-        try:
-            with open(file_path, "rb") as f:
-                base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-                pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="700" type="application/pdf"></iframe>'
-                st.markdown(pdf_display, unsafe_allow_html=True)
-        except:
-            st.warning("PDF not found. Put file in /slides folder.")
+    uploaded = st.file_uploader("Upload PDF Slides", type=["pdf"])
 
-    if subject == "CHEM 1101":
-        st.subheader("CHEM 1101 Slides")
-        show_pdf("slides/chem1101.pdf")
+    if uploaded:
+        file_path = f"slides/{subject.replace(' ', '').lower()}.pdf"
+        with open(file_path, "wb") as f:
+            f.write(uploaded.getbuffer())
+        st.success("Uploaded ✔")
 
-    if subject == "CHEM 1201":
-        st.subheader("CHEM 1201 Slides")
-        show_pdf("slides/chem1201.pdf")
+    file_map = {
+        "CHEM 1101": "slides/chem1101.pdf",
+        "CHEM 1201": "slides/chem1201.pdf"
+    }
+
+    path = file_map[subject]
+
+    if os.path.exists(path):
+        st.success("Slides available ✔")
+        with open(path, "rb") as f:
+            st.download_button("Download Slides", f, file_name=path)
+    else:
+        st.warning("No slides uploaded yet")
+
+# ---------------- STUDY WITH ME ----------------
+elif page == "Study With Me":
+    st.title("🧠 Study With Me Mode")
+
+    subject = st.selectbox("Course", ["CHEM 1101", "CHEM 1201"])
+
+    file_map = {
+        "CHEM 1101": "slides/chem1101.pdf",
+        "CHEM 1201": "slides/chem1201.pdf"
+    }
+
+    path = file_map[subject]
+
+    def extract_text(pdf_path):
+        text = ""
+        if os.path.exists(pdf_path):
+            with open(pdf_path, "rb") as f:
+                reader = PyPDF2.PdfReader(f)
+                for page in reader.pages:
+                    text += page.extract_text() or ""
+        return text
+
+    text = extract_text(path)
+
+    if text.strip() == "":
+        st.warning("No readable slides found.")
+    else:
+        mode = st.selectbox("Mode", ["Summary", "Quiz Me", "Teach Back"])
+
+        if mode == "Summary":
+            st.subheader("Summary")
+            st.write(text[:2000])
+
+        elif mode == "Quiz Me":
+            st.subheader("Quiz")
+
+            sentences = text.split(".")
+            q = random.choice(sentences)
+
+            st.info(f"Explain: {q.strip()}")
+
+            answer = st.text_input("Your answer")
+
+            if st.button("Check"):
+                if len(answer) > 10:
+                    st.success("Good effort 🔥")
+                else:
+                    st.error("Write more detail")
+
+        elif mode == "Teach Back":
+            st.subheader("Teach Back")
+
+            user = st.text_area("Explain the topic in your own words")
+
+            if st.button("Review"):
+                if len(user) > 20:
+                    st.success("Strong explanation 🔥")
+                else:
+                    st.warning("Add more detail like you're teaching someone")
